@@ -5,7 +5,7 @@ def list_files(path: str):
     return [path + "/" + f for f in os.listdir(path)]
 
 if __name__ == "__main__":
-    with open("list_benign.csv") as fd:
+    with open("list_malware.csv") as fd:
         fd.readline()
         for i in range(1000):
             x = fd.readline().strip().split(",")
