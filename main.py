@@ -1,11 +1,12 @@
 import requests
+import hashlib
 import os
 
 def list_files(path: str):
     return [path + "/" + f for f in os.listdir(path)]
 
 if __name__ == "__main__":
-    with open("list_malware.csv") as fd:
+    with open("list_benign.csv") as fd:
         fd.readline()
         for i in range(1000):
             x = fd.readline().strip().split(",")
@@ -15,20 +16,37 @@ if __name__ == "__main__":
             list_benign = list_files("benign")
             list_malware = list_files("malware")
 
-            found = False
+            ignore = False
 
             for benign in list_benign:
                 if sha256 in benign:
-                    print(f"found {sha256} in benign, ignore")
-                    found = True
-                    break
+                    print(f"found {sha256} in benign")
+                    file = open(benign, "rb")
+                    readfile = file.read()
+                    hash_256 = hashlib.sha256(readfile)
+                    print(sha256.lower(), hash_256.hexdigest())
+                    if sha256.lower() == hash_256.hexdigest():
+                        print("hash match ignore")
+                        ignore = True
+                        break
+                    else:
+                        print("hash not match")
+
             for malware in list_malware:
                 if sha256 in malware:
-                    print(f"found {sha256} in malware, ignore")
-                    found = True
-                    break
+                    print(f"found {sha256} in malware")
+                    file = open(benign, "rb")
+                    readfile = file.read()
+                    hash_256 = hashlib.sha256(readfile)
+                    print(sha256.lower(), hash_256.hexdigest())
+                    if sha256.lower() == hash_256.hexdigest():
+                        print("hash match ignore")
+                        ignore = True
+                        break
+                    else:
+                        print("hash not match")
             
-            if found == True:
+            if ignore == True:
                 continue
 
             url = "https://androzoo.uni.lu/api/download"
