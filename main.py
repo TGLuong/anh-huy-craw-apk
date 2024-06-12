@@ -35,7 +35,7 @@ if __name__ == "__main__":
             for malware in list_malware:
                 if sha256 in malware:
                     print(f"found {sha256} in malware")
-                    file = open(benign, "rb")
+                    file = open(malware, "rb")
                     readfile = file.read()
                     hash_256 = hashlib.sha256(readfile)
                     print(sha256.lower(), hash_256.hexdigest())
